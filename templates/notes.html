@@ -10,17 +10,35 @@
 <body>
     <h1 class="notes_page-name">Notes</h1>
 
+    <div style="margin: 20px;">
+        <a href="{% url 'category_add' %}">Add category</a> |
+        <a href="{% url 'note_add' %}">Add note</a>
+    </div>
+
     {% for category in categories %}
         <div class="name_page-card">
-            <h2 class="notes-name">{{ category.name_categories }}</h2>
+            <h2 class="notes-name">
+                <a href="{% url 'category_edit' category.pk %}">
+                    {{ category.name_categories }}
+                </a>
+                |
+                <a href="{% url 'category_delete' category.pk %}">Delete category</a>
+            </h2>
 
             <div class="notes-container">
                 {% for note in category.notes.all %}
                     <div class="name_page-card">
-                        <div class="notes-name">{{ note.title }}</div>
+                        <div class="notes-name">
+                            <a href="{% url 'note_edit' note.pk %}">
+                                {{ note.title }}
+                            </a>
+                        </div>
                         <div class="notes-description">{{ note.text }}</div>
                         <div class="notes-time">Reminder: {{ note.reminder|yesno:"Yes,No" }}</div>
                         <div class="notes-time">Done: {{ note.is_done|yesno:"Yes,No" }}</div>
+                        <div>
+                            <a href="{% url 'note_delete' note.pk %}">Delete</a>
+                        </div>
                     </div>
                 {% empty %}
                     <div class="notes-description">No notes in this category.</div>

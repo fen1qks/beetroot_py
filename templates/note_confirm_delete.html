@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete note</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1 class="notes_page-name">Delete note</h1>
+
+    <div class="name_page-card" style="padding: 20px;">
+        <p>Are you sure you want to delete "{{ object.title }}"?</p>
+
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit">Yes, delete</button>
+        </form>
+
+        <br>
+        <a href="{% url 'notes_page' %}">Cancel</a>
+    </div>
+</body>
+</html>
