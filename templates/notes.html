@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1 class="notes_page-name">Notes</h1>
+
+    {% for category in categories %}
+        <div class="name_page-card">
+            <h2 class="notes-name">{{ category.name_categories }}</h2>
+
+            <div class="notes-container">
+                {% for note in category.notes.all %}
+                    <div class="name_page-card">
+                        <div class="notes-name">{{ note.title }}</div>
+                        <div class="notes-description">{{ note.text }}</div>
+                        <div class="notes-time">Reminder: {{ note.reminder|yesno:"Yes,No" }}</div>
+                        <div class="notes-time">Done: {{ note.is_done|yesno:"Yes,No" }}</div>
+                    </div>
+                {% empty %}
+                    <div class="notes-description">No notes in this category.</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% empty %}
+        <div class="notes-description">No categories found.</div>
+    {% endfor %}
+</body>
+</html>

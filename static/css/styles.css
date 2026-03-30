@@ -1,0 +1,48 @@
+body {
+    background: gray !important;
+}
+
+.name_page-card {
+    background: white;
+    border: 1px solid #000000;
+    margin: 10px;
+    border-radius: 1px;
+}
+
+.notes_page-name {
+    color: #333;
+    font-size: 40px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.notes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.notes_page-name {
+    color: #333;
+    font-size: 40px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.notes-name {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.notes-time {
+    color: darkslategray;
+    font-weight: bold;
+}
+
+.notes-description {
+    color: #666;
+    font-style: italic;
+}
