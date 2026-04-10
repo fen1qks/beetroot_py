@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row mb-4">
         <div class="col">
-            <h2>Список категорій і нотаток</h2>
+            <h2>Список категорій і моїх нотаток</h2>
         </div>
         <div class="col-auto">
             <a href="{% url 'note_add' %}" class="btn btn-primary">Додати нотатку</a>
@@ -34,6 +34,7 @@
                                         <th>Опис</th>
                                         <th>Нагадування</th>
                                         <th>Статус</th>
+                                        <th>Автор</th>
                                         <th>Дії</th>
                                     </tr>
                                 </thead>
@@ -56,6 +57,7 @@
                                                     <span class="badge bg-warning text-dark">В процесі</span>
                                                 {% endif %}
                                             </td>
+                                            <td>{{ note.user.username|default:"-" }}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{% url 'note_edit' note.pk %}" class="btn btn-sm btn-warning">Редагувати</a>
@@ -68,7 +70,7 @@
                             </table>
                         </div>
                     {% else %}
-                        <div class="alert alert-info mb-0">У цій категорії поки немає нотаток.</div>
+                        <div class="alert alert-info mb-0">У цій категорії поки немає твоїх нотаток.</div>
                     {% endif %}
                 </div>
             </div>
