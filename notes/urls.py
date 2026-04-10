@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_headers, notes_list, notes, NotesPageView, NoteCreateView, NoteUpdateView, NoteDeleteView, \
+from .views import show_headers, notes_list, NotesPageView, NoteCreateView, NoteUpdateView, NoteDeleteView, \
     CategoriesCreateView, CategoriesUpdateView, CategoriesDeleteView
 
 urlpatterns = [

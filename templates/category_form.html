@@ -1,24 +1,54 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category form</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <h1 class="notes_page-name">Category form</h1>
+{% extends 'base.html' %}
 
-    <div class="name_page-card" style="padding: 20px;">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save</button>
-        </form>
+{% block title %}{% if form.instance.pk %}Редагування категорії{% else %}Створення категорії{% endif %}{% endblock %}
 
-        <br>
-        <a href="{% url 'notes_page' %}">Back</a>
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">
+                {% if form.instance.pk %}
+                    Редагування категорії
+                {% else %}
+                    Створення нової категорії
+                {% endif %}
+            </h2>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            {% if field.name == 'notes' %}
+                                <div class="mb-3">
+                                    <label class="form-label d-block">{{ field.label }}</label>
+                                    {{ field.errors }}
+                                    {% for checkbox in field %}
+                                        <div class="form-check">
+                                            {{ checkbox.tag }}
+                                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                                        </div>
+                                    {% empty %}
+                                        <p class="text-muted mb-0">Нотаток ще немає.</p>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field.errors }}
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Зберегти</button>
+                            <a href="{% url 'notes_page' %}" class="btn btn-light">Назад</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,13 +1,10 @@
 from django.http import HttpResponse
-
 from django.shortcuts import render
-
-from notes.models import Categories
-
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
-from .models import Note
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
+
 from .forms import NoteForm, CategoriesForm
+from .models import Note, Categories
 
 
 def show_headers(request):
@@ -27,7 +24,7 @@ def notes_list(request):
     notes = [
         {
             'name': 'Name 1',
-            'time': "10.03.2026",
+            'time': '10.03.2026',
             'description': 'Description 1'
         },
         {
@@ -38,9 +35,6 @@ def notes_list(request):
     ]
     return render(request, 'index.html', {'notes': notes})
 
-def notes(request):
-    categories = Categories.objects.prefetch_related('notes').all()
-    return render(request, 'notes.html', {'categories': categories})
 
 class NotesPageView(ListView):
     model = Categories
@@ -48,13 +42,8 @@ class NotesPageView(ListView):
     context_object_name = 'categories'
 
     def get_queryset(self):
-        return Categories.objects.prefetch_related('notes').all()
+        return Categories.objects.prefetch_related('notes').all().order_by('name_categories')
 
-class CategoriesUpdateView(UpdateView):
-    model = Categories
-    form_class = CategoriesForm
-    template_name = 'category_form.html'
-    success_url = reverse_lazy('notes_page')
 
 class CategoriesCreateView(CreateView):
     model = Categories
@@ -62,16 +51,19 @@ class CategoriesCreateView(CreateView):
     template_name = 'category_form.html'
     success_url = reverse_lazy('notes_page')
 
+
 class CategoriesUpdateView(UpdateView):
     model = Categories
     form_class = CategoriesForm
     template_name = 'category_form.html'
     success_url = reverse_lazy('notes_page')
 
+
 class CategoriesDeleteView(DeleteView):
     model = Categories
     template_name = 'note_confirm_delete.html'
     success_url = reverse_lazy('notes_page')
+
 
 class NoteCreateView(CreateView):
     model = Note
@@ -81,9 +73,9 @@ class NoteCreateView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        categories = form.cleaned_data['categories']
-        self.object.categories.set(categories)
+        self.object.categories.set(form.cleaned_data['categories'])
         return response
+
 
 class NoteUpdateView(UpdateView):
     model = Note
@@ -93,9 +85,9 @@ class NoteUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        categories = form.cleaned_data['categories']
-        self.object.categories.set(categories)
+        self.object.categories.set(form.cleaned_data['categories'])
         return response
+
 
 class NoteDeleteView(DeleteView):
     model = Note

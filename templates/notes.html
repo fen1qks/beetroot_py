@@ -1,52 +1,82 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <h1 class="notes_page-name">Notes</h1>
+{% extends 'base.html' %}
 
-    <div style="margin: 20px;">
-        <a href="{% url 'category_add' %}">Add category</a> |
-        <a href="{% url 'note_add' %}">Add note</a>
+{% block title %}Список нотаток{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Список категорій і нотаток</h2>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'note_add' %}" class="btn btn-primary">Додати нотатку</a>
+            <a href="{% url 'category_add' %}" class="btn btn-outline-primary">Додати категорію</a>
+        </div>
     </div>
 
-    {% for category in categories %}
-        <div class="name_page-card">
-            <h2 class="notes-name">
-                <a href="{% url 'category_edit' category.pk %}">
-                    {{ category.name_categories }}
-                </a>
-                |
-                <a href="{% url 'category_delete' category.pk %}">Delete category</a>
-            </h2>
-
-            <div class="notes-container">
-                {% for note in category.notes.all %}
-                    <div class="name_page-card">
-                        <div class="notes-name">
-                            <a href="{% url 'note_edit' note.pk %}">
-                                {{ note.title }}
-                            </a>
-                        </div>
-                        <div class="notes-description">{{ note.text }}</div>
-                        <div class="notes-time">Reminder: {{ note.reminder|yesno:"Yes,No" }}</div>
-                        <div class="notes-time">Done: {{ note.is_done|yesno:"Yes,No" }}</div>
-                        <div>
-                            <a href="{% url 'note_delete' note.pk %}">Delete</a>
-                        </div>
+    {% if categories %}
+        {% for category in categories %}
+            <div class="card category-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ category.name_categories }}</h5>
+                    <div>
+                        <a href="{% url 'category_edit' category.pk %}" class="btn btn-sm btn-warning">Редагувати</a>
+                        <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger">Видалити</a>
                     </div>
-                {% empty %}
-                    <div class="notes-description">No notes in this category.</div>
-                {% endfor %}
+                </div>
+                <div class="card-body">
+                    {% if category.notes.all %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Назва</th>
+                                        <th>Опис</th>
+                                        <th>Нагадування</th>
+                                        <th>Статус</th>
+                                        <th>Дії</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for note in category.notes.all %}
+                                        <tr>
+                                            <td>{{ note.title }}</td>
+                                            <td class="note-text">{{ note.text }}</td>
+                                            <td>
+                                                {% if note.reminder %}
+                                                    <span class="badge bg-success">Так</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Ні</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if note.is_done %}
+                                                    <span class="badge bg-primary">Виконано</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning text-dark">В процесі</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{% url 'note_edit' note.pk %}" class="btn btn-sm btn-warning">Редагувати</a>
+                                                    <a href="{% url 'note_delete' note.pk %}" class="btn btn-sm btn-danger">Видалити</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mb-0">У цій категорії поки немає нотаток.</div>
+                    {% endif %}
+                </div>
             </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            Категорій поки немає.
         </div>
-    {% empty %}
-        <div class="notes-description">No categories found.</div>
-    {% endfor %}
-</body>
-</html>
+    {% endif %}
+</div>
+{% endblock %}

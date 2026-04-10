@@ -1,22 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Список нотатків</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="name_page-card" >
-        <h1 class="notes_page-name">Нотатки</h1>
-    </div>
-    <div class="notes-container">
-        {% for note in notes %}
-            <div class="notes-card">
-                <h2 class="notes-name">{{ note.name }}</h2>
-                <p class="notes-time">Дата створення: {{ note.time }}</p>
-                <p class="notes-description">{{ note.description }}</p>
+{% extends 'base.html' %}
+
+{% block title %}Список нотаток{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="h2 mb-1">Список нотаток</h1>
+    <p class="text-secondary mb-0">Старий тестовий список, якщо ти ще використовуєш цей route.</p>
+</div>
+
+<div class="row g-3">
+    {% for note in notes %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5">{{ note.name }}</h2>
+                    <p class="text-secondary mb-2">Дата створення: {{ note.time }}</p>
+                    <p class="mb-0">{{ note.description }}</p>
+                </div>
             </div>
-        {% endfor %}
-    </div>
-</body>
-</html>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
