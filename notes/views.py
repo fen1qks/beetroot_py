@@ -9,6 +9,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from .forms import NoteForm, CategoriesForm, RegisterForm, LoginForm
 from .models import Note, Categories
+from .telegram_bot import bot
 
 
 def show_headers(request):
@@ -97,6 +98,12 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         response = super().form_valid(form)
         self.object.categories.set(form.cleaned_data['categories'])
+
+        try:
+            bot.send_note_to_telegram(self.object)
+        except Exception as e:
+            print("Telegram send error:", e)
+
         return response
 
 
